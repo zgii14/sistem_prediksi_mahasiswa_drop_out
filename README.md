@@ -205,3 +205,36 @@ Karakteristik utama Random Forest:
 ---
 
 ## 🚀 6. Deployment
+
+![image](https://github.com/user-attachments/assets/61fb368b-6d3b-44b7-95f4-0977c386479c)
+
+Output Jika Mahasiswa Kemungkinan Bertahan :
+
+![image](https://github.com/user-attachments/assets/469e8633-7fed-4fbe-89ee-e9b198fdb407)
+
+Output Jika Mahasiswa Kemungkinan Dropout :
+
+![image](https://github.com/user-attachments/assets/e0ef0c6c-d79e-4d34-a6c2-378a6c313843)
+
+Link Implementasi : https://sistemprediksimahasiswadropout-ruvgjms5f4inhcg2jx8utr.streamlit.app/
+
+---
+
+## 7. Rencana Pengembangan
+
+Beberapa langkah strategis direncanakan untuk pengembangan lebih lanjut dari sistem prediksi mahasiswa drop out ini, antara lain:
+
+- Penggunaan Data Real
+Sistem saat ini dibangun menggunakan data dummy untuk keperluan pengembangan dan pengujian awal. Salah satu prioritas utama ke depan adalah mengganti data dummy dengan data riil dari institusi pendidikan agar prediksi lebih relevan, akurat, dan dapat digunakan dalam pengambilan keputusan nyata.
+
+- Peningkatan Akurasi Model
+Dengan tersedianya data lebih lengkap dan akurat, proses training ulang model akan dilakukan untuk mengevaluasi apakah algoritma yang digunakan (Random Forest) masih optimal, atau perlu diganti/ditambahkan dengan model lain seperti XGBoost, LightGBM, atau bahkan deep learning.
+
+- Integrasi dengan Sistem Akademik Kampus
+Sistem prediksi ke depan diharapkan untuk dapat diintegrasikan langsung dengan Sistem Informasi Akademik (SIAKAD) kampus agar input data dilakukan secara otomatis dan prediksi bisa dijalankan secara real-time.
+
+- Peningkatan UI/UX Aplikasi
+Antarmuka pengguna (UI) berbasis Streamlit kedepannya lebih baik untuk ditingkatkan agar lebih interaktif, informatif, dan ramah pengguna, termasuk penambahan fitur visualisasi tren risiko mahasiswa berdasarkan program studi, semester, atau kelompok sosial ekonomi.
+
+- Evaluasi dan Validasi Lapangan
+Setelah model digunakan secara operasional, sebaiknya dilakukan evaluasi berkala terhadap performa prediksi serta validasi lapangan berdasarkan data dropout aktual dari kampus. Hal ini penting untuk memastikan reliabilitas dan keandalan sistem secara jangka panjang.
