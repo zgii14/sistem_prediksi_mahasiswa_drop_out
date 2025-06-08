@@ -223,7 +223,7 @@ Output Jika Mahasiswa Kemungkinan Dropout :
 
 ![image](https://github.com/user-attachments/assets/e0ef0c6c-d79e-4d34-a6c2-378a6c313843)
 
-Link Implementasi : https://sistemprediksimahasiswadropout-ruvgjms5f4inhcg2jx8utr.streamlit.app/
+### **Link Implementasi : https://sistemprediksimahasiswadropout-ruvgjms5f4inhcg2jx8utr.streamlit.app/**
 
 ---
 
