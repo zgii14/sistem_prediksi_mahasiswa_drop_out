@@ -1,65 +1,78 @@
 import streamlit as st
 import numpy as np
-import pandas as pd
 import joblib
+from sklearn.ensemble import RandomForestClassifier
 
-# === Load Model dan Scaler ===
-model = joblib.load("model_rf.pkl")
-scaler_gpa = joblib.load("scaler_gpa.pkl")
-pca = joblib.load("pca.pkl")
-scaler_features = joblib.load("scaler_features.pkl")
+# ===============================
+# Load Model dan Preprocessing
+# ===============================
+model = joblib.load('random_forest_model.pkl')
+scaler_gpa = joblib.load('scaler_gpa.pkl')
+pca = joblib.load('pca.pkl')
+scaler_features = joblib.load('scaler_features.pkl')
 
-# === Halaman Streamlit ===
-st.set_page_config(page_title="Prediksi Mahasiswa Dropout", layout="centered")
-st.title("🎓 Prediksi Mahasiswa Dropout")
-st.write("Masukkan data mahasiswa berikut:")
+# ===============================
+# Judul Aplikasi
+# ===============================
+st.title("Prediksi Mahasiswa Drop Out")
 
-# === Form Input ===
-with st.form("prediction_form"):
-    gpa_inputs = [st.number_input(f"GPA Semester {i+1}", min_value=0.0, max_value=4.0, step=0.01, key=f"gpa{i}") for i in range(8)]
-    
-    attendance = st.slider("Attendance Rate (%)", 0, 100, 85)
-    retaken = st.number_input("Jumlah Mata Kuliah yang Diulang", min_value=0, max_value=20, value=1)
-    lms_score = st.slider("Skor Aktivitas LMS", 0, 100, 75)
-    work_hours = st.slider("Jam Kerja per Minggu", 0, 40, 0)
-    
-    employment_status = st.selectbox("Status Pekerjaan", ["Unemployed", "Employed"])
-    socioeconomic = st.selectbox("Status Sosial Ekonomi", ["Low", "Middle", "High"])
+# ===============================
+# Input Data Pengguna
+# ===============================
+st.header("Masukkan Data Mahasiswa")
 
-    submitted = st.form_submit_button("🔍 Prediksi Dropout")
+# Input Numerik
+attendance = st.slider("Tingkat Kehadiran (%)", 0, 100, 75)
+retaken = st.number_input("Jumlah Mata Kuliah yang Diulang", min_value=0, max_value=20, value=0)
+lms_score = st.slider("Skor Aktivitas LMS", 0, 100, 50)
+work_hours = st.number_input("Jam Kerja per Minggu", min_value=0, max_value=60, value=0)
 
-# === Mapping dan Prediksi ===
-if submitted:
-    # GPA PCA transform
-    gpa_array = np.array(gpa_inputs).reshape(1, -1)
+# Input GPA Semester 1 - 8
+st.subheader("Nilai GPA per Semester")
+gpa_values = []
+for i in range(1, 9):
+    gpa = st.number_input(f"GPA Semester {i}", min_value=0.0, max_value=4.0, value=3.0, step=0.01)
+    gpa_values.append(gpa)
+
+# Input Kategorikal
+employment_status = st.selectbox("Status Pekerjaan", ['Employed', 'Unemployed'])
+socioeconomic_status = st.selectbox("Status Sosial Ekonomi", ['High', 'Middle', 'Low'])
+
+# ===============================
+# Proses Prediksi
+# ===============================
+if st.button("Prediksi"):
+    # --- PCA pada GPA ---
+    gpa_array = np.array(gpa_values).reshape(1, -1)
     gpa_scaled = scaler_gpa.transform(gpa_array)
-    gpa_pca = pca.transform(gpa_scaled)  # menghasilkan PC1 dan PC2
+    gpa_pca = pca.transform(gpa_scaled)
 
-    # One-hot encoding manual untuk 2 kolom kategori
-    emp_unemployed = 1 if employment_status == "Unemployed" else 0
-    socio_low = 1 if socioeconomic == "Low" else 0
-    socio_middle = 1 if socioeconomic == "Middle" else 0
-    # socio_high tidak dimasukkan karena drop_first=True saat one-hot
+    # --- One-hot encoding manual ---
+    emp_unemployed = 1 if employment_status == 'Unemployed' else 0
+    socio_low = 1 if socioeconomic_status == 'Low' else 0
+    socio_middle = 1 if socioeconomic_status == 'Middle' else 0
 
-    # Gabungkan semua fitur
-    features = np.array([attendance, retaken, lms_score, work_hours,
-                         gpa_pca[0][0], gpa_pca[0][1],
-                         emp_unemployed, socio_low, socio_middle]).reshape(1, -1)
+    # --- Gabungkan fitur numerik ---
+    numerical_features = np.array([
+        attendance, retaken, lms_score, work_hours,
+        gpa_pca[0][0], gpa_pca[0][1]
+    ]).reshape(1, -1)
 
-    # Scaling fitur numerik (tanpa kolom one-hot)
-    features_scaled = scaler_features.transform(features)
+    scaled_numerical = scaler_features.transform(numerical_features)
 
-    # Prediksi
-    prediction = model.predict(features_scaled)[0]
-    probability = model.predict_proba(features_scaled)[0][1]
+    # --- Gabungkan numerik + one-hot ---
+    features_final = np.hstack([
+        scaled_numerical,
+        np.array([[emp_unemployed, socio_low, socio_middle]])
+    ])
 
-    # === Output Hasil ===
-    st.markdown("---")
+    # --- Prediksi ---
+    prediction = model.predict(features_final)[0]
+    probability = model.predict_proba(features_final)[0][1]
+
+    # --- Tampilkan Hasil ---
     st.subheader("Hasil Prediksi")
-
     if prediction == 1:
-        st.error(f"Mahasiswa diprediksi berisiko **Dropout** dengan probabilitas {probability:.2%}")
+        st.error(f"Mahasiswa diprediksi akan Drop Out dengan probabilitas {probability:.2f}")
     else:
-        st.success(f"✅ Mahasiswa diprediksi **tidak Dropout** dengan probabilitas {probability:.2%}")
-
-    st.caption("Model menggunakan Random Forest Classifier berdasarkan data akademik, aktivitas LMS, dan kondisi sosial ekonomi.")
+        st.success(f"Mahasiswa diprediksi akan Bertahan dengan probabilitas {1 - probability:.2f}")
