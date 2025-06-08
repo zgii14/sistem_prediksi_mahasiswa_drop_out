@@ -1,5 +1,12 @@
 # Laporan Sistem Prediksi Mahasiswa Beresiko Tinggi Dorp Out (DO): [Dummy Datasets]
 
+---
+### Nama Kelompok
+1. Muhammad Rozagi (G1A022008)
+2. Ulfa Stevi Juliana (G1A022042)
+3. Ahmad Zul Zhafran (G1A022088)
+---
+
 ## Project Overview
 Proyek ini bertujuan untuk membangun sistem prediksi mahasiswa yang berisiko tinggi mengalami drop out (DO) dari perguruan tinggi dengan menggunakan pendekatan machine learning berbasis data sintetis. Melalui proses pemodelan yang menyeluruh, data akademik (GPA per semester) dan non-akademik (kehadiran, aktivitas e-learning, jam kerja, dll.) dianalisis guna mengidentifikasi pola yang dapat digunakan untuk mengklasifikasikan mahasiswa ke dalam kategori berisiko atau tidak. Proyek ini tidak hanya fokus pada akurasi prediksi, tetapi juga memberikan pemahaman terhadap fitur-fitur yang paling memengaruhi kemungkinan DO, dengan harapan sistem ini dapat menjadi alat bantu intervensi dini bagi pihak kampus.
 
