@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestClassifier
 # ===============================
 # Load Model dan Preprocessing
 # ===============================
-model = joblib.load('random_forest_model.pkl')
+model = joblib.load('model_rf.pkl')
 scaler_gpa = joblib.load('scaler_gpa.pkl')
 pca = joblib.load('pca.pkl')
 scaler_features = joblib.load('scaler_features.pkl')
